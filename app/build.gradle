@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application' version '8.1.4'
+    id 'org.jetbrains.kotlin.android' version '1.9.0'
 }
 
 android {
@@ -14,7 +15,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        
+
         // Agar tidak error saat memasukkan file .so
         ndk {
             abiFilters 'arm64-v8a', 'armeabi-v7a'
@@ -27,9 +28,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // TAMBAHAN: Agar Kotlin dan Java menggunakan versi yang sama
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
     // Memberitahu Android Studio / GitHub untuk mencari library native (.so)
@@ -46,8 +53,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    // ==========================================
     // TAMBAHAN PENTING UNTUK MEMBACA FILE .AAR
-    // ==========================================
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    
+    // TAMBAHAN PENTING: Library Kotlin (Wajib untuk libv2ray.aar)
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0'
 }
