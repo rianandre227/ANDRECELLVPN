@@ -22,6 +22,13 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Locate AAPT2 and configure Gradle
+      run: |
+        BUILD_TOOLS_VERSION=$(ls $ANDROID_HOME/build-tools | sort -V | tail -n 1)
+        AAPT2_PATH="$ANDROID_HOME/build-tools/$BUILD_TOOLS_VERSION/aapt2"
+        echo "Located AAPT2 at: $AAPT2_PATH"
+        echo "android.aapt2FromMavenOverride=$AAPT2_PATH" >> gradle.properties
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
