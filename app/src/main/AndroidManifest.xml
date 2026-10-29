@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.andrecell.vpn">
+
+    <!-- Izin Wakelock & VPN -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".AddConfigActivity" />
+        <activity android:name=".ConfigListActivity" />
+        <activity android:name=".V2rayActivity" />
+        <activity android:name=".ExportConfigActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".LogsActivity" />
+        <activity android:name=".MoreActivity" />
+
+        <!-- DAFTARKAN VPN SERVICE -->
+        <service
+            android:name=".MyVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B111E"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- ================= SECTION 1: DNS OPTIONS ================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_settings_card"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="DNS options" android:textColor="#FFFFFF" android:textSize="16sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="^" android:textColor="#A0A0A0" android:textSize="16sp"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Remote DNS Type (Bisa diklik) -->
+            <LinearLayout android:id="@+id/rowRemoteDnsType" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical" android:background="?android:attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Remote DNS type" android:textColor="#FFFFFF" android:textSize="14sp"/>
+                <TextView android:id="@+id/tvRemoteDnsType" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DoH (HTTPS)  >" android:textColor="#A0A0A0" android:textSize="14sp"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Remote DNS Server -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Remote DNS server" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="8dp"/>
+                <EditText android:id="@+id/etRemoteDnsServer" android:layout_width="match_parent" android:layout_height="45dp" android:background="@drawable/bg_input" android:text="8.8.8.8" android:textColor="#FFFFFF" android:padding="12dp"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Bootstrap DNS -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bootstrap (direct) DNS" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="8dp"/>
+                <EditText android:id="@+id/etBootstrapDns" android:layout_width="match_parent" android:layout_height="45dp" android:background="@drawable/bg_input" android:text="8.8.4.4" android:textColor="#FFFFFF" android:padding="12dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Remote DNS resolves through the proxy; bootstrap DNS resolves over the direct connection." android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="24dp"/>
+
+
+        <!-- ================= SECTION 2: ANTI-CENSORSHIP ================= -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ANTI-CENSORSHIP" android:textColor="#A0A0A0" android:textSize="12sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_settings_card" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical" android:layout_marginBottom="24dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Anti-censorship options" android:textColor="#FFFFFF" android:textSize="16sp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="v" android:textColor="#A0A0A0" android:textSize="16sp"/>
+        </LinearLayout>
+
+
+        <!-- ================= SECTION 3: ADVANCED MODES ================= -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ADVANCED MODES" android:textColor="#A0A0A0" android:textSize="12sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_settings_card" android:orientation="vertical" android:layout_marginBottom="8dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Advanced Modes" android:textColor="#FFFFFF" android:textSize="16sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="^" android:textColor="#A0A0A0" android:textSize="16sp"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Ad & Tracker Blocker -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ad &amp; Tracker Blocker" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Blocks intrusive ads, mobile banners..." android:textColor="#A0A0A0" android:textSize="12sp"/>
+                </LinearLayout>
+                <Switch android:id="@+id/swAdBlocker" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Gaming Mode -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gaming Mode (Low Latency)" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Optimizes packet MTU (1280), enables TCP Fast Open..." android:textColor="#A0A0A0" android:textSize="12sp"/>
+                </LinearLayout>
+                <Switch android:id="@+id/swGamingMode" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Double VPN (Bisa diklik) -->
+            <LinearLayout android:id="@+id/rowDoubleVpn" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical" android:background="?android:attr/selectableItemBackground">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Double VPN (Chain Proxy)" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Chains your connection through a second exit node..." android:textColor="#A0A0A0" android:textSize="12sp"/>
+                </LinearLayout>
+                <TextView android:id="@+id/tvDoubleVpn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Disabled  >" android:textColor="#A0A0A0" android:textSize="14sp"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Smart Battery Saver -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Smart Battery Saver" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Disconnects VPN when the screen turns off..." android:textColor="#A0A0A0" android:textSize="12sp"/>
+                </LinearLayout>
+                <Switch android:id="@+id/swBatterySaver" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Advanced connection features including ad blocking, gaming mode, and double VPN." android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="24dp"/>
+
+
+        <!-- ================= SECTION 4: ADVANCED ================= -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ADVANCED" android:textColor="#A0A0A0" android:textSize="12sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_settings_card" android:orientation="vertical" android:layout_marginBottom="8dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Advanced tunnel options" android:textColor="#FFFFFF" android:textSize="16sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="^" android:textColor="#A0A0A0" android:textSize="16sp"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Log level (Bisa diklik) -->
+            <LinearLayout android:id="@+id/rowLogLevel" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical" android:background="?android:attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Log level" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                <TextView android:id="@+id/tvLogLevel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="warn  >" android:textColor="#A0A0A0" android:textSize="14sp"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Show speed -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Show speed in notification" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Live up/down speed in the ongoing notification..." android:textColor="#A0A0A0" android:textSize="12sp"/>
+                </LinearLayout>
+                <Switch android:id="@+id/swShowSpeed" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Multiplexing -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Multiplexing" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Carries several connections over one tunnel link..." android:textColor="#A0A0A0" android:textSize="12sp"/>
+                </LinearLayout>
+                <Switch android:id="@+id/swMultiplexing" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- MTU preset (Bisa diklik) -->
+            <LinearLayout android:id="@+id/rowMtuPreset" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical" android:background="?android:attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="MTU preset" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                <TextView android:id="@+id/tvMtuPreset" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Standard (1500)  >" android:textColor="#A0A0A0" android:textSize="14sp"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Effective MTU -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Effective MTU" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1280" android:textColor="#A0A0A0" android:textSize="14sp"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- TUN stack preset (Bisa diklik) -->
+            <LinearLayout android:id="@+id/rowTunStack" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical" android:background="?android:attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="TUN stack preset" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                <TextView android:id="@+id/tvTunStack" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="gVisor  >" android:textColor="#A0A0A0" android:textSize="14sp"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- IPv6 -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="IPv6" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                <Switch android:id="@+id/swIpv6" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Bypass private networks -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bypass private networks" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LAN and link-local traffic stays off the tunnel." android:textColor="#A0A0A0" android:textSize="12sp"/>
+                </LinearLayout>
+                <Switch android:id="@+id/swBypassPrivate" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Per-app routing (Bisa diklik) -->
+            <LinearLayout android:id="@+id/rowPerApp" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical" android:background="?android:attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Per-app routing" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                <TextView android:id="@+id/tvPerApp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="All apps (VPN enabled)  >" android:textColor="#A0A0A0" android:textSize="14sp"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547"/>
+
+            <!-- Allow another VPN -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Allow another VPN upstream" android:textColor="#FFFFFF" android:textSize="15sp"/>
+                <Switch android:id="@+id/swAllowVpnUpstream" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+        
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Automatic uses the safe gVisor default. System can improve compatibility on some networks. Off stops both the core output and the diagnostic log file, so the Logs screen stays empty." android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="30dp"/>
+
+    </LinearLayout>
+</ScrollView>

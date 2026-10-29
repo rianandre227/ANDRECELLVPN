@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/bg_card"
+    android:padding="12dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:gravity="center_vertical">
+
+    <!-- Ikon Ceklis Kiri -->
+    <TextView
+        android:id="@+id/tvCheck"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:text="○"
+        android:textColor="#A0A0A0"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:layout_marginEnd="12dp"/>
+
+    <!-- Info Config -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            
+            <TextView
+                android:id="@+id/tvLockIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔒"
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:layout_marginEnd="6dp"/>
+
+            <TextView
+                android:id="@+id/tvItemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nama Config"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvItemHost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Host/IP"
+            android:textColor="#A0A0A0"
+            android:textSize="13sp"
+            android:layout_marginTop="2dp"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <!-- Baris Protokol & Ping -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:id="@+id/tvItemProtocol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SSH"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:background="@drawable/bg_tag"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"/>
+
+            <!-- TEKS PING -->
+            <TextView
+                android:id="@+id/tvPing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PING"
+                android:textColor="#FFD700"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Ikon Aksi Kanan -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/btnStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="☆"
+            android:textColor="#A0A0A0"
+            android:textSize="20sp"
+            android:padding="8dp"/>
+
+        <TextView
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✏️"
+            android:textSize="18sp"
+            android:padding="8dp"/>
+
+        <TextView
+            android:id="@+id/btnShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔗"
+            android:textSize="18sp"
+            android:padding="8dp"/>
+
+        <TextView
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⋮"
+            android:textColor="#A0A0A0"
+            android:textSize="24sp"
+            android:padding="8dp"/>
+    </LinearLayout>
+
+</LinearLayout>

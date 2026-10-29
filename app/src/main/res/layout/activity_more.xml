@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B111E"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="More Options" android:textColor="#00D2FF" android:textSize="18sp" android:textStyle="bold" android:gravity="center" android:layout_marginBottom="30dp"/>
+
+    <!-- Device ID -->
+    <LinearLayout android:id="@+id/menuDeviceId" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp" android:background="?android:attr/selectableItemBackground">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📱" android:textSize="24sp" android:layout_marginEnd="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Device ID" android:textColor="#FFFFFF" android:textSize="16sp"/>
+    </LinearLayout>
+
+    <!-- Settings -->
+    <LinearLayout android:id="@+id/menuSettingsApp" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp" android:background="?android:attr/selectableItemBackground">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⚙️" android:textSize="24sp" android:layout_marginEnd="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Settings" android:textColor="#FFFFFF" android:textSize="16sp"/>
+    </LinearLayout>
+
+    <!-- Version Info -->
+    <LinearLayout android:id="@+id/menuVersion" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp" android:background="?android:attr/selectableItemBackground">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ℹ️" android:textSize="24sp" android:layout_marginEnd="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Version Info" android:textColor="#FFFFFF" android:textSize="16sp"/>
+    </LinearLayout>
+
+    <!-- About Creator -->
+    <LinearLayout android:id="@+id/menuAbout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp" android:background="?android:attr/selectableItemBackground">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="👨‍💻" android:textSize="24sp" android:layout_marginEnd="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="About Creator" android:textColor="#FFFFFF" android:textSize="16sp"/>
+    </LinearLayout>
+</LinearLayout>

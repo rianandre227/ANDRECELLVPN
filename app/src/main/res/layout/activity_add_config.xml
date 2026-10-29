@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B111E"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- ========================================== -->
+        <!-- JUDUL DI SINI SUDAH DIGANTI -->
+        <!-- ========================================== -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Andre Cell Dondong"
+            android:textColor="#00D2FF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- TOMBOL SAVE DI ATAS -->
+        <Button
+            android:id="@+id/btnSaveConfig"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="✓  Save"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_input"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Protocol Dropdown -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Protocol" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="4dp"/>
+        <Spinner
+            android:id="@+id/spinnerProtocol"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_input"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Remarks -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Remarks" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/etConfigName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_input"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- SSH Host -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SSH Host" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/etHost"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_input"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- SSH Port & UDPGW Port (Bersebelahan) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="8dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SSH Port" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="4dp"/>
+                <EditText android:id="@+id/etPort" android:layout_width="match_parent" android:layout_height="50dp" android:background="@drawable/bg_input" android:textColor="#FFFFFF" android:inputType="number" android:padding="12dp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Udpgw Port" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="4dp"/>
+                <EditText android:id="@+id/etUdpgwPort" android:layout_width="match_parent" android:layout_height="50dp" android:background="@drawable/bg_input" android:textColor="#FFFFFF" android:inputType="number" android:text="7300" android:padding="12dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Checkbox DNS -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Enable UDPGW transparent DNS. This may override any set custom DNS server." android:textColor="#FFFFFF" android:textSize="14sp"/>
+            <CheckBox android:id="@+id/cbDns" android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="true" android:buttonTint="#00D2FF"/>
+        </LinearLayout>
+
+        <!-- Username & Password -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SSH Username" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="4dp"/>
+        <EditText android:id="@+id/etUsername" android:layout_width="match_parent" android:layout_height="50dp" android:background="@drawable/bg_input" android:textColor="#FFFFFF" android:padding="12dp" android:layout_marginBottom="16dp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SSH Password" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="4dp"/>
+        <EditText android:id="@+id/etPassword" android:layout_width="match_parent" android:layout_height="50dp" android:background="@drawable/bg_input" android:textColor="#FFFFFF" android:inputType="textPassword" android:padding="12dp" android:layout_marginBottom="16dp"/>
+
+        <!-- TLS Version Dropdown -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TLS Version" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="4dp"/>
+        <Spinner android:id="@+id/spinnerTls" android:layout_width="match_parent" android:layout_height="50dp" android:background="@drawable/bg_input" android:layout_marginBottom="16dp"/>
+
+        <!-- SNI -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SNI" android:textColor="#A0A0A0" android:textSize="12sp" android:layout_marginBottom="4dp"/>
+        <EditText android:id="@+id/etSni" android:layout_width="match_parent" android:layout_height="50dp" android:background="@drawable/bg_input" android:textColor="#FFFFFF" android:padding="12dp" android:layout_marginBottom="24dp"/>
+
+        <!-- Garis Pembatas -->
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A3547" android:layout_marginBottom="16dp"/>
+
+        <!-- Bagian Payload -->
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Payload" android:textColor="#FFFFFF" android:gravity="center" android:textSize="16sp" android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnEditPayload"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="✏️ Edit with payload generator"
+            android:textColor="#00D2FF"
+            android:backgroundTint="#1E2535"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- KOTAK INPUT PAYLOAD -->
+        <EditText
+            android:id="@+id/etPayload"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="#1E2535"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:gravity="top|start"
+            android:padding="12dp"
+            android:inputType="textMultiLine"
+            android:hint="Masukkan raw payload di sini..."
+            android:textColorHint="#808080"
+            android:layout_marginBottom="40dp"/>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B111E">
+
+    <!-- Area Konten yang bisa di-scroll -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomMenu"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Andre Cell Dondong"
+                android:textColor="#00D2FF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp"/>
+
+            <Button
+                android:id="@+id/btnConnect"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:text="CONNECT"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/btn_circle"
+                android:textSize="18sp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NOT CONNECTED"
+                android:textColor="#00D2FF"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:id="@+id/tvTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00:00"
+                android:textColor="#A0A0A0"
+                android:textSize="14sp"
+                android:layout_marginBottom="30dp"/>
+
+            <!-- KOTAK ACTIVE CONFIGURATION -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Active Configuration"
+                        android:textColor="#A0A0A0"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/tvPingHome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PING"
+                        android:textColor="#FFD700"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvSavedConfig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Belum ada config tersimpan"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="15dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#2A3547"
+                    android:layout_marginBottom="15dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Download"
+                            android:textColor="#00D2FF"
+                            android:textSize="12sp"/>
+                        <TextView
+                            android:id="@+id/tvDownloadTotal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 B"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Upload"
+                            android:textColor="#00D2FF"
+                            android:textSize="12sp"/>
+                        <TextView
+                            android:id="@+id/tvUploadTotal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 B"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- KOTAK CREATOR MESSAGE -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CREATOR MESSAGE"
+                    android:textColor="#FFD700"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="👨‍💻 SERVER INI DIKELOLA OLEH ANDRE CELL DONDONG\n📞 NOMOR PENGADUAN : 081225691637\n📧 EMAIL DUKUNGAN : bantuan@arsderk.my.id\n\n⚠️ CATATAN PENTING..!\n- APABILA ADA KENDALA, SILAHKAN HUBUNGI KAMI.\n- KAMI SENANTIASA MERAWAT SERVER AGAR STABIL &amp; NYAMAN DIGUNAKAN.\n- MOHON KERJA SAMANYA MENJAGA KONFIGURASI INI AGAR LAYANAN TETAP TERJAGA.\n\n** ANDRE CELL DONDONG © 2026 **"
+                    android:textColor="#A0A0A0"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="4dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- MENU BAWAH (5 Tombol) -->
+    <LinearLayout
+        android:id="@+id/bottomMenu"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="#151E2D"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/menuHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="🏠\nHome"
+            android:textColor="#FFD700"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:id="@+id/menuSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="☁️\nConfigs"
+            android:textColor="#A0A0A0"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:id="@+id/menuSubs"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="📁\nSubs"
+            android:textColor="#A0A0A0"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:id="@+id/menuLogs"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="ⓘ\nLogs"
+            android:textColor="#A0A0A0"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:id="@+id/menuMore"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="⋮\nMore"
+            android:textColor="#A0A0A0"
+            android:textSize="10sp"/>
+    </LinearLayout>
+
+</RelativeLayout>

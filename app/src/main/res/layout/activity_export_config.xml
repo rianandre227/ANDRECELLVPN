@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B111E"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- TOMBOL EXPORT DI ATAS -->
+        <Button
+            android:id="@+id/btnDoExport"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="⬆️  Export Configuration"
+            android:textColor="#A0A0A0"
+            android:background="@drawable/bg_input"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Filename -->
+        <EditText
+            android:id="@+id/etExportFilename"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_input"
+            android:hint="Config Filename"
+            android:textColorHint="#A0A0A0"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Lock the configuration -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Lock the configuration" android:textColor="#FFFFFF" android:textSize="14sp"/>
+            <CheckBox android:id="@+id/cbLockConfig" android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="true" android:buttonTint="#00D2FF"/>
+        </LinearLayout>
+
+        <!-- Export to cloud -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Export to cloud" android:textColor="#FFFFFF" android:textSize="14sp"/>
+            <CheckBox android:id="@+id/cbExportCloud" android:layout_width="wrap_content" android:layout_height="wrap_content" android:buttonTint="#00D2FF"/>
+        </LinearLayout>
+
+        <!-- Password -->
+        <EditText
+            android:id="@+id/etExportPassword"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_input"
+            android:hint="Password (Optional)"
+            android:textColorHint="#A0A0A0"
+            android:textColor="#FFFFFF"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Mobile data only -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Mobile data network only" android:textColor="#FFFFFF" android:textSize="14sp"/>
+            <CheckBox android:id="@+id/cbMobileData" android:layout_width="wrap_content" android:layout_height="wrap_content" android:buttonTint="#00D2FF"/>
+        </LinearLayout>
+
+        <!-- Block rooted -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Block rooted/jailbroken devices" android:textColor="#FFFFFF" android:textSize="14sp"/>
+            <CheckBox android:id="@+id/cbBlockRooted" android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="true" android:buttonTint="#00D2FF"/>
+        </LinearLayout>
+
+        <!-- Official store -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Official store installation only" android:textColor="#FFFFFF" android:textSize="14sp"/>
+            <CheckBox android:id="@+id/cbOfficialStore" android:layout_width="wrap_content" android:layout_height="wrap_content" android:buttonTint="#00D2FF"/>
+        </LinearLayout>
+
+        <!-- Expiry Date -->
+        <EditText
+            android:id="@+id/etExportExpiry"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_input"
+            android:hint="Expiry Date and Time (Optional)"
+            android:textColorHint="#A0A0A0"
+            android:textColor="#FFFFFF"
+            android:focusable="false"
+            android:clickable="true"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Device IDs -->
+        <EditText
+            android:id="@+id/etExportDeviceIds"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_input"
+            android:hint="Device Id(s) (Optional)"
+            android:textColorHint="#A0A0A0"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Message for users -->
+        <EditText
+            android:id="@+id/etExportMessage"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/bg_input"
+            android:hint="Message for users (Optional)"
+            android:textColorHint="#A0A0A0"
+            android:textColor="#FFFFFF"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Custom Server Message -->
+        <EditText
+            android:id="@+id/etExportServerMessage"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/bg_input"
+            android:hint="Custom Server Message (Optional)"
+            android:textColorHint="#A0A0A0"
+            android:textColor="#FFFFFF"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:padding="12dp"
+            android:layout_marginBottom="30dp"/>
+
+    </LinearLayout>
+</ScrollView>

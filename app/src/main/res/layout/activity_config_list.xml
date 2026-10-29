@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B111E">
+
+    <!-- Judul Configs -->
+    <TextView
+        android:id="@+id/tvTitleConfigs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Configs"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="20dp"/>
+
+    <!-- List View (DIPERBAIKI: Layout below mengarah ke judul) -->
+    <ListView
+        android:id="@+id/listViewConfigs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tvTitleConfigs"
+        android:layout_marginBottom="80dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
+
+    <!-- Tombol Tambah Config -->
+    <Button
+        android:id="@+id/btnTambahConfig"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:text="+ ADD NEW CONFIG"
+        android:textColor="#000000"
+        android:backgroundTint="#00FFCC"
+        android:textStyle="bold"/>
+
+</RelativeLayout>

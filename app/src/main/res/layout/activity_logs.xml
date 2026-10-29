@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B111E">
+
+    <!-- TOP BAR -->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&lt; Back"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btnCopyLog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📄"
+                android:textSize="20sp"
+                android:layout_marginEnd="16dp"/>
+
+            <TextView
+                android:id="@+id/btnClearLog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🗑️"
+                android:textSize="20sp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- TITLE & SEARCH -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topBar"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Core log"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Search Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="#1E2535"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="12dp"
+            android:layout_marginBottom="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔍"
+                android:textSize="18sp"
+                android:layout_marginEnd="8dp"/>
+            <EditText
+                android:id="@+id/etSearchLog"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="Search logs..."
+                android:textColorHint="#A0A0A0"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <!-- Filter Buttons (Horizontal Scroll) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginBottom="16dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView android:id="@+id/filterAll" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="All · 1485" android:textColor="#000000" android:textSize="12sp" android:background="@drawable/bg_filter_active" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:layout_marginEnd="8dp"/>
+                <TextView android:id="@+id/filterError" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Error · 913" android:textColor="#A0A0A0" android:textSize="12sp" android:background="@drawable/bg_filter_inactive" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:layout_marginEnd="8dp"/>
+                <TextView android:id="@+id/filterWarning" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Warning · 36" android:textColor="#A0A0A0" android:textSize="12sp" android:background="@drawable/bg_filter_inactive" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:layout_marginEnd="8dp"/>
+                <TextView android:id="@+id/filterInfo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Info" android:textColor="#A0A0A0" android:textSize="12sp" android:background="@drawable/bg_filter_inactive" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:layout_marginEnd="8dp"/>
+                <TextView android:id="@+id/filterDebug" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Debug" android:textColor="#A0A0A0" android:textSize="12sp" android:background="@drawable/bg_filter_inactive" android:paddingHorizontal="12dp" android:paddingVertical="6dp"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <!-- AREA LOG UTAMA -->
+    <ScrollView
+        android:id="@+id/scrollLogs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerLayout"
+        android:layout_above="@id/btnJumpLatest"
+        android:layout_marginHorizontal="16dp"
+        android:background="#151E2D"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvLogContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#A0A0A0"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:lineSpacingExtra="4dp"
+            android:textIsSelectable="true"/>
+    </ScrollView>
+
+    <!-- TOMBOL JUMP TO LATEST -->
+    <Button
+        android:id="@+id/btnJumpLatest"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:text="↓ Jump to latest"
+        android:textColor="#000000"
+        android:backgroundTint="#A0B0C0"
+        android:textStyle="bold"/>
+
+</RelativeLayout>

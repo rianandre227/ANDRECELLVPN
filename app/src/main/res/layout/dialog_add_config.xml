@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#242A38"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:layout_margin="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add config manually"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/tvV2ray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="V2ray Config (VMess/VLESS/Trojan)"
+        android:textColor="#00D2FF"
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:background="?android:attr/selectableItemBackground"/>
+
+    <TextView
+        android:id="@+id/tvSsh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SSH Config"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:background="?android:attr/selectableItemBackground"/>
+
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textColor="#A0A0A0"
+        android:textSize="14sp"
+        android:gravity="end"
+        android:padding="12dp"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>

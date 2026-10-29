@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#242A38"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:layout_margin="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Import V2ray Link"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+
+    <EditText
+        android:id="@+id/etImportLink"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:hint="Paste vmess://, vless://, atau trojan:// di sini..."
+        android:textColorHint="#808080"
+        android:textColor="#FFFFFF"
+        android:background="#1E2535"
+        android:gravity="top|start"
+        android:padding="10dp"
+        android:inputType="textMultiLine"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/btnImport"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="IMPORT CONFIG"
+        android:textColor="#000000"
+        android:backgroundTint="#00FFCC"
+        android:textStyle="bold"/>
+
+</LinearLayout>
