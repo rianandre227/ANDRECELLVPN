@@ -19,11 +19,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+// IMPORT LIBRARY XRAY
+import libv2ray.CoreController;
+import libv2ray.Libv2ray;
+
 public class MyVpnService extends VpnService {
     private static final String TAG = "AndreVPN";
     private ParcelFileDescriptor mInterface;
     private boolean isRunning = false;
     private Process tun2socksProcess;
+    private CoreController coreController;
 
     public static long realDownloadBytes = 0;
     public static long realUploadBytes = 0;
@@ -64,39 +69,29 @@ public class MyVpnService extends VpnService {
                 security = detail.optString("security", "tls");
             }
 
-            // 2. Buat Config Xray (Format JSON)
+            // 2. Buat Config Xray (JSON)
             String xrayConfig = XrayConfigGenerator.generate(protocol, server, port, id, path, hostHeader, sni, security);
             
-            // 3. Jalankan Xray Core (Mesin)
-            // CATATAN: Ini memanggil class dari library libv2ray.aar
-            // Jika class name-nya berbeda, Anda harus menyesuaikannya.
-            try {
-                // Memulai Xray Core (Simulasi pemanggilan standard)
-                // Class Libv2ray biasanya ada di dalam .aar
-                Class<?> v2rayClass = Class.forName("com.v2ray.core.Libv2ray");
-                v2rayClass.getMethod("startXray", String.class).invoke(null, xrayConfig);
-                Log.d(TAG, "Xray Engine Started");
-            } catch (Exception e) {
-                Log.e(TAG, "Gagal menjalankan Xray: " + e.getMessage());
-            }
-
-            // 4. Buat VPN Interface (TUN)
+            // 3. Buat VPN Interface (TUN)
             Builder builder = new Builder();
             builder.setSession("Andre Cell VPN");
             builder.addAddress(VPN_ADDRESS, 32);
-            builder.addRoute("0.0.0.0", 0);
+            builder.addRoute("0.0.0.0", 0); // Route semua traffic
             builder.addDnsServer("8.8.8.8");
             builder.setMtu(VPN_MTU);
-
+            
             mInterface = builder.establish();
             isRunning = true;
-            
             showNotification();
+
+            // 4. Jalankan Mesin Xray (libv2ray.aar)
+            Libv2ray.initCoreEnv(getFilesDir().getAbsolutePath());
+            coreController = Libv2ray.newCoreController(null);
+            coreController.startLoop(xrayConfig, getFilesDir().getAbsolutePath());
+            Log.d(TAG, "Xray Engine Started");
 
             // 5. Jalankan Tun2Socks (Jembatan)
             startTun2Socks();
-
-            Log.d(TAG, "VPN Service Started Successfully");
 
         } catch (Exception e) {
             Log.e(TAG, "Error Start VPN: " + e.getMessage());
@@ -106,36 +101,25 @@ public class MyVpnService extends VpnService {
 
     private void startTun2Socks() {
         try {
-            // Ekstrak file .so dari folder jniLibs ke penyimpanan internal agar bisa dieksekusi
-            File tun2socksFile = new File(getFilesDir(), "libhev-socks5-tunnel.so");
-            if (!tun2socksFile.exists()) {
-                // Di GitHub, file .so ada di dalam APK, kita harus mengekstraknya
-                InputStream is = getAssets().open("libhev-socks5-tunnel.so"); // Catatan: Kadang perlu copy manual
-                // Jika tidak ada di assets, kita asumsikan sudah ada di nativeLibraryDir
-                File nativeLib = new File(getApplicationInfo().nativeLibraryDir, "libhev-socks5-tunnel.so");
-                if (nativeLib.exists()) {
-                    tun2socksFile = nativeLib;
-                }
-            }
-            
-            // Beri izin eksekusi
-            tun2socksFile.setExecutable(true);
+            // Ambil lokasi file .so dari folder native aplikasi
+            String nativeLibDir = getApplicationInfo().nativeLibraryDir;
+            File tun2socksFile = new File(nativeLibDir, "libhev-socks5-tunnel.so");
 
-            // Perintah untuk menjalankan hev-socks5-tunnel
-            // Format: ./tun2socks -F <TUN_FD> -M <MTU> -s <SOCKS_ADDR>:<SOCKS_PORT>
+            if (!tun2socksFile.exists()) {
+                Log.e(TAG, "File libhev-socks5-tunnel.so tidak ditemukan di: " + tun2socksFile.getAbsolutePath());
+                return;
+            }
+
+            // Perintah untuk menjalankan Tun2Socks
             List<String> cmd = new ArrayList<>();
             cmd.add(tun2socksFile.getAbsolutePath());
-            cmd.add("-F");
-            cmd.add(String.valueOf(mInterface.getFd()));
-            cmd.add("-M");
-            cmd.add(String.valueOf(VPN_MTU));
-            cmd.add("-s");
-            cmd.add("127.0.0.1:" + SOCKS_PORT);
+            cmd.add("-F"); cmd.add(String.valueOf(mInterface.getFd()));
+            cmd.add("-M"); cmd.add(String.valueOf(VPN_MTU));
+            cmd.add("-s"); cmd.add("127.0.0.1:" + SOCKS_PORT);
 
             ProcessBuilder pb = new ProcessBuilder(cmd);
             pb.redirectErrorStream(true);
             tun2socksProcess = pb.start();
-
             Log.d(TAG, "Tun2Socks Started");
 
         } catch (Exception e) {
@@ -151,11 +135,11 @@ public class MyVpnService extends VpnService {
             tun2socksProcess = null;
         }
 
-        try {
-            Class<?> v2rayClass = Class.forName("com.v2ray.core.Libv2ray");
-            v2rayClass.getMethod("stopXray").invoke(null);
-            Log.d(TAG, "Xray Engine Stopped");
-        } catch (Exception e) {}
+        if (coreController != null) {
+            coreController.stopLoop();
+            Libv2ray.resetCoreEnv();
+            coreController = null;
+        }
 
         if (mInterface != null) {
             try { mInterface.close(); } catch (Exception e) {}
@@ -199,4 +183,4 @@ public class MyVpnService extends VpnService {
         stopVpn();
         super.onDestroy();
     }
-            }
+}
