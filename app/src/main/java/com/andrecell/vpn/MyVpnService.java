@@ -48,7 +48,6 @@ public class MyVpnService extends VpnService {
             return START_NOT_STICKY;
         }
         startVpn();
-        // PERBAIKAN: Gunakan START_NOT_STICKY agar tidak terjadi crash loop
         return START_NOT_STICKY; 
     }
 
@@ -178,9 +177,12 @@ public class MyVpnService extends VpnService {
             NotificationManager manager = getSystemService(NotificationManager.class);
             if (manager != null) manager.createNotificationChannel(channel);
         }
+        
         Intent stopIntent = new Intent(this, MyVpnService.class);
         stopIntent.setAction("STOP");
-        PendingIntent pendingStop = PendingIntent.getService(this, 0, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        
+        // PERBAIKAN DI BARIS INI: Memasukkan 'stopIntent' sebagai parameter ketiga
+        PendingIntent pendingStop = PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Notification notification = new Notification.Builder(this, channelId)
                 .setContentTitle("Andre Cell VPN")
