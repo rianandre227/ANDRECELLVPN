@@ -33,7 +33,6 @@ public class MyVpnService extends VpnService {
     private Process tun2socksProcess;
     private CoreController coreController;
 
-    // Variabel untuk mengecek apakah VPN benar-benar menyala
     public static boolean isVpnActuallyRunning = false; 
 
     public static long realDownloadBytes = 0;
@@ -124,7 +123,6 @@ public class MyVpnService extends VpnService {
 
             writeBreadcrumb("10. SUKSES! VPN Terhubung.");
             
-            // Set status ke true jika semua langkah di atas berhasil tanpa error
             isVpnActuallyRunning = true;
 
         } catch (Exception e) {
@@ -202,7 +200,7 @@ public class MyVpnService extends VpnService {
 
     private void stopVpn() {
         isRunning = false;
-        isVpnActuallyRunning = false; // Set status ke false
+        isVpnActuallyRunning = false;
         if (tun2socksProcess != null) { tun2socksProcess.destroy(); tun2socksProcess = null; }
         if (coreController != null) {
             try { coreController.stopLoop(); } catch (Exception e) {}
