@@ -77,7 +77,7 @@ public class XrayConfigGenerator {
             if (security.equalsIgnoreCase("tls")) {
                 JSONObject tlsSettings = new JSONObject();
                 tlsSettings.put("serverName", sni);
-                tlsSettings.put("allowInsecure", true);
+                // BARIS allowInsecure SUDAH DIHAPUS
                 streamSettings.put("tlsSettings", tlsSettings);
             }
 
@@ -99,4 +99,4 @@ public class XrayConfigGenerator {
             return null;
         }
     }
-        }
+}
