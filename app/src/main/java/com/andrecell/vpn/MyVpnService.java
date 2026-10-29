@@ -37,7 +37,8 @@ public class MyVpnService extends VpnService {
     public static long realUploadBytes = 0;
     public static boolean isServerReachable = true;
 
-    private static final String VPN_ADDRESS = "10.0.0.2";
+    // PERBAIKAN: Ubah IP agar tidak bentrok dengan jaringan lokal
+    private static final String VPN_ADDRESS = "10.8.0.2"; 
     private static final int VPN_MTU = 1500;
     private static final int SOCKS_PORT = 10808;
 
@@ -55,6 +56,11 @@ public class MyVpnService extends VpnService {
         if (isRunning) return;
 
         try {
+            // PENGAMAN: Pastikan izin VPN benar-benar sudah diberikan
+            if (prepare(this) != null) {
+                throw new Exception("Izin VPN belum diberikan oleh sistem!");
+            }
+
             SharedPreferences sharedPref = getSharedPreferences("ConfigVPN", MODE_PRIVATE);
             String rawHost = sharedPref.getString("HOST", "");
             String protocol = sharedPref.getString("PROTOCOL", "VLESS");
@@ -81,7 +87,10 @@ public class MyVpnService extends VpnService {
             builder.setMtu(VPN_MTU);
             
             mInterface = builder.establish();
-            if (mInterface == null) throw new Exception("Gagal membuat TUN Interface");
+            
+            if (mInterface == null) {
+                throw new Exception("Gagal membuat TUN. Cek apakah ada VPN lain yang aktif atau izin ditolak.");
+            }
             
             isRunning = true;
             showNotification();
@@ -181,7 +190,6 @@ public class MyVpnService extends VpnService {
         Intent stopIntent = new Intent(this, MyVpnService.class);
         stopIntent.setAction("STOP");
         
-        // PERBAIKAN DI BARIS INI: Memasukkan 'stopIntent' sebagai parameter ketiga
         PendingIntent pendingStop = PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Notification notification = new Notification.Builder(this, channelId)
