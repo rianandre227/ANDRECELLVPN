@@ -14,7 +14,8 @@ public class LogsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logs);
         
-        TextView tvLogs = findViewById(R.id.tvLogs);
+        // PERBAIKAN: Gunakan ID tvLogContent sesuai dengan file XML
+        TextView tvLogs = findViewById(R.id.tvLogContent);
         
         // Baca file log error asli
         File logFile = new File(getFilesDir(), "vpn_error.log");
@@ -35,7 +36,7 @@ public class LogsActivity extends Activity {
             }
             tvLogs.setText(text.toString());
         } else {
-            tvLogs.setText("> Tidak ada error yang tercatat.\n\n> Jika VPN gagal menyala (tidak ada ikon kunci), berarti kemungkinan error terjadi di dalam library native (C++) yang tidak bisa ditangkap oleh Java, atau aplikasi berhasil menyala tapi koneksi internetnya diblokir.");
+            tvLogs.setText("> Tidak ada error yang tercatat.\n\n> Jika VPN gagal menyala (tidak ada ikon kunci), berarti error terjadi di dalam library native (C++) yang tidak tertangkap oleh sistem Java.");
         }
     }
 }
