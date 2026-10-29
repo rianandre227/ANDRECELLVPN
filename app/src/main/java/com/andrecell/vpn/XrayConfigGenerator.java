@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 public class XrayConfigGenerator {
     
-    // Fungsi untuk mengubah config kita menjadi JSON Xray
     public static String generate(String protocol, String server, String port, String id, String path, String host, String sni, String security) {
         try {
             JSONObject root = new JSONObject();
@@ -19,57 +18,72 @@ public class XrayConfigGenerator {
             // 2. Inbounds (Pintu masuk untuk Tun2Socks)
             JSONArray inbounds = new JSONArray();
             JSONObject inbound = new JSONObject();
-            inbound.put("port", 10808); // Port lokal untuk Tun2Socks
+            inbound.put("port", 10808);
             inbound.put("listen", "127.0.0.1");
             inbound.put("protocol", "socks");
             
-            JSONObject settings = new JSONObject();
-            settings.put("auth", "noauth");
-            settings.put("udp", true);
-            inbound.put("settings", settings);
+            JSONObject inSettings = new JSONObject();
+            inSettings.put("auth", "noauth");
+            inSettings.put("udp", true);
+            inbound.put("settings", inSettings);
             inbounds.put(inbound);
             root.put("inbounds", inbounds);
 
             // 3. Outbounds (Koneksi ke Server VPN Anda)
             JSONArray outbounds = new JSONArray();
             JSONObject outbound = new JSONObject();
-            outbound.put("protocol", protocol.toLowerCase()); // vless, vmess, trojan
+            outbound.put("protocol", protocol.toLowerCase());
 
-            JSONObject vnext = new JSONObject();
-            vnext.put("address", server);
-            
-            // Pastikan port aman dari error parsing
-            try {
-                vnext.put("port", Integer.parseInt(port));
-            } catch (Exception e) {
-                vnext.put("port", 443); // Default jika port kosong
-            }
+            JSONObject outSettings = new JSONObject();
 
-            JSONArray users = new JSONArray();
-            JSONObject user = new JSONObject();
-            
-            if (protocol.equalsIgnoreCase("vmess")) {
-                user.put("id", id);
-                user.put("alterId", 0);
-                user.put("security", "auto");
+            if (protocol.equalsIgnoreCase("trojan")) {
+                // Format Khusus Trojan: servers -> [ { address, port, password } ]
+                JSONArray servers = new JSONArray();
+                JSONObject serverObj = new JSONObject();
+                serverObj.put("address", server);
+                try {
+                    serverObj.put("port", Integer.parseInt(port));
+                } catch (Exception e) {
+                    serverObj.put("port", 443);
+                }
+                serverObj.put("password", id); // Di Trojan, ID adalah password
+                servers.put(serverObj);
+                
+                outSettings.put("servers", servers);
+
             } else {
+                // Format VMess / VLESS: vnext -> [ { address, port, users: [...] } ]
+                JSONObject vnext = new JSONObject();
+                vnext.put("address", server);
+                try {
+                    vnext.put("port", Integer.parseInt(port));
+                } catch (Exception e) {
+                    vnext.put("port", 443);
+                }
+
+                JSONArray users = new JSONArray();
+                JSONObject user = new JSONObject();
                 user.put("id", id);
-                if (protocol.equalsIgnoreCase("vless")) {
+                
+                if (protocol.equalsIgnoreCase("vmess")) {
+                    user.put("alterId", 0);
+                    user.put("security", "auto");
+                } else if (protocol.equalsIgnoreCase("vless")) {
                     user.put("encryption", "none");
                     user.put("flow", "");
                 }
+                users.put(user);
+                vnext.put("users", users);
+
+                JSONArray vnextArray = new JSONArray();
+                vnextArray.put(vnext);
+                
+                outSettings.put("vnext", vnextArray);
             }
-            users.put(user);
-            vnext.put("users", users);
 
-            JSONArray servers = new JSONArray();
-            servers.put(vnext);
-
-            JSONObject outSettings = new JSONObject();
-            outSettings.put("vnext", servers);
             outbound.put("settings", outSettings);
 
-            // Stream Settings (TLS, WebSocket, dll)
+            // 4. Stream Settings (TLS, WebSocket, dll)
             JSONObject streamSettings = new JSONObject();
             streamSettings.put("network", "ws"); 
             streamSettings.put("security", security.toLowerCase()); 
@@ -77,7 +91,6 @@ public class XrayConfigGenerator {
             if (security.equalsIgnoreCase("tls")) {
                 JSONObject tlsSettings = new JSONObject();
                 tlsSettings.put("serverName", sni);
-                // BARIS allowInsecure SUDAH DIHAPUS
                 streamSettings.put("tlsSettings", tlsSettings);
             }
 
