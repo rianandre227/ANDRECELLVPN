@@ -47,7 +47,6 @@ public class MyVpnService extends VpnService {
             stopVpn();
             return START_NOT_STICKY;
         }
-        // Tulis log pertama sebelum mulai
         writeBreadcrumb("01. Service dimulai (onStartCommand)");
         startVpn();
         return START_NOT_STICKY; 
@@ -80,6 +79,13 @@ public class MyVpnService extends VpnService {
             writeBreadcrumb("02. Membuat Config Xray JSON...");
             String xrayConfig = XrayConfigGenerator.generate(protocol, server, port, id, path, hostHeader, sni, security);
             
+            // SIMPAN JSON KE FILE (Xray biasanya butuh path file, bukan teks mentah)
+            File configFile = new File(getFilesDir(), "config.json");
+            FileOutputStream fos = new FileOutputStream(configFile);
+            fos.write(xrayConfig.getBytes());
+            fos.close();
+            writeBreadcrumb("02b. Config disimpan ke: " + configFile.getAbsolutePath());
+            
             writeBreadcrumb("03. Membuat TUN Interface...");
             Builder builder = new Builder();
             builder.setSession("Andre Cell VPN");
@@ -87,6 +93,13 @@ public class MyVpnService extends VpnService {
             builder.addRoute("0.0.0.0", 0);
             builder.addDnsServer("8.8.8.8");
             builder.setMtu(VPN_MTU);
+            
+            // Mencegah routing loop dengan aplikasi kita sendiri
+            try {
+                builder.addDisallowedApplication(getPackageName());
+            } catch (Exception e) {
+                writeBreadcrumb("Gagal addDisallowedApplication: " + e.getMessage());
+            }
             
             mInterface = builder.establish();
             
@@ -98,7 +111,6 @@ public class MyVpnService extends VpnService {
             writeBreadcrumb("04. TUN Berhasil dibuat. Menampilkan Notifikasi...");
             showNotification();
 
-            // MULAI XRAY (Bagian paling rawan crash)
             writeBreadcrumb("05. Inisialisasi Environment Xray...");
             Libv2ray.initCoreEnv(getFilesDir().getAbsolutePath(), "");
             
@@ -106,11 +118,11 @@ public class MyVpnService extends VpnService {
             coreController = Libv2ray.newCoreController(null);
             
             writeBreadcrumb("07. Memulai Loop Xray (startLoop)...");
-            coreController.startLoop(xrayConfig, mInterface.getFd());
+            // PERBAIKAN: Gunakan path file config, bukan teks JSON
+            coreController.startLoop(configFile.getAbsolutePath(), mInterface.getFd());
             
             writeBreadcrumb("08. Xray Berhasil Menyala!");
 
-            // JALANKAN TUN2SOCKS
             writeBreadcrumb("09. Menjalankan Tun2Socks...");
             startTun2Socks();
 
@@ -163,11 +175,10 @@ public class MyVpnService extends VpnService {
         }
     }
 
-    // Fungsi untuk mencatat jejak ke file log
     private void writeBreadcrumb(String message) {
         try {
             File logFile = new File(getFilesDir(), "vpn_debug.log");
-            FileOutputStream fos = new FileOutputStream(logFile, true); // true = Append (tambah)
+            FileOutputStream fos = new FileOutputStream(logFile, true); 
             fos.write((message + "\n").getBytes());
             fos.close();
         } catch (Exception e) {
