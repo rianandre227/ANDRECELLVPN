@@ -14,10 +14,16 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-// IMPORT DARI LIBV2RAY
 import libv2ray.CoreController;
 import libv2ray.Libv2ray;
 
@@ -26,7 +32,7 @@ public class MyVpnService extends VpnService {
     private ParcelFileDescriptor mInterface;
     private boolean isRunning = false;
     private Process tun2socksProcess;
-    private CoreController coreController; // Objek Xray
+    private CoreController coreController;
 
     public static long realDownloadBytes = 0;
     public static long realUploadBytes = 0;
@@ -50,7 +56,6 @@ public class MyVpnService extends VpnService {
         if (isRunning) return;
 
         try {
-            // 1. Ambil Data Config
             SharedPreferences sharedPref = getSharedPreferences("ConfigVPN", MODE_PRIVATE);
             String rawHost = sharedPref.getString("HOST", "");
             String protocol = sharedPref.getString("PROTOCOL", "VLESS");
@@ -67,10 +72,8 @@ public class MyVpnService extends VpnService {
                 security = detail.optString("security", "tls");
             }
 
-            // 2. Buat Config Xray (JSON)
             String xrayConfig = XrayConfigGenerator.generate(protocol, server, port, id, path, hostHeader, sni, security);
             
-            // 3. Buat VPN Interface (TUN)
             Builder builder = new Builder();
             builder.setSession("Andre Cell VPN");
             builder.addAddress(VPN_ADDRESS, 32);
@@ -79,24 +82,23 @@ public class MyVpnService extends VpnService {
             builder.setMtu(VPN_MTU);
             
             mInterface = builder.establish();
+            if (mInterface == null) throw new Exception("Gagal membuat TUN Interface");
+            
             isRunning = true;
             showNotification();
 
-            // 4. Jalankan Mesin Xray (libv2ray.aar)
-            // Inisialisasi Environment
+            // Jalankan Mesin Xray
             Libv2ray.initCoreEnv(getFilesDir().getAbsolutePath(), "");
-            
-            // Buat instance CoreController
             coreController = Libv2ray.newCoreController(null);
-            
-            // startLoop membutuhkan (String config, int tunFd)
             coreController.startLoop(xrayConfig, mInterface.getFd());
             Log.d(TAG, "Xray Engine Started");
 
-            // 5. Jalankan Tun2Socks (Jembatan)
+            // Jalankan Tun2Socks
             startTun2Socks();
 
         } catch (Exception e) {
+            // TANGKAP ERROR DAN SIMPAN KE FILE
+            saveErrorToFile(e);
             Log.e(TAG, "Error Start VPN: " + e.getMessage());
             stopVpn();
         }
@@ -104,20 +106,23 @@ public class MyVpnService extends VpnService {
 
     private void startTun2Socks() {
         try {
+            // 1. Ambil file .so dari folder native
             String nativeLibDir = getApplicationInfo().nativeLibraryDir;
-            File tun2socksFile = new File(nativeLibDir, "libhev-socks5-tunnel.so");
+            File sourceFile = new File(nativeLibDir, "libhev-socks5-tunnel.so");
+            
+            // 2. Copy ke folder aman aplikasi (getFilesDir)
+            File destFile = new File(getFilesDir(), "tun2socks");
+            copyFile(sourceFile, destFile);
+            
+            // 3. Beri izin eksekusi
+            destFile.setExecutable(true);
 
-            if (!tun2socksFile.exists()) {
-                Log.e(TAG, "File libhev-socks5-tunnel.so tidak ditemukan!");
-                return;
-            }
-
-            // Perintah menjalankan Tun2Socks
+            // 4. Jalankan
             List<String> cmd = new ArrayList<>();
-            cmd.add(tun2socksFile.getAbsolutePath());
-            cmd.add("-F"); cmd.add(String.valueOf(mInterface.getFd())); // File Descriptor TUN (Untuk Tun2Socks)
-            cmd.add("-M"); cmd.add(String.valueOf(VPN_MTU)); // MTU
-            cmd.add("-s"); cmd.add("127.0.0.1:" + SOCKS_PORT); // Arahkan ke port SOCKS Xray
+            cmd.add(destFile.getAbsolutePath());
+            cmd.add("-F"); cmd.add(String.valueOf(mInterface.getFd()));
+            cmd.add("-M"); cmd.add(String.valueOf(VPN_MTU));
+            cmd.add("-s"); cmd.add("127.0.0.1:" + SOCKS_PORT);
 
             ProcessBuilder pb = new ProcessBuilder(cmd);
             pb.redirectErrorStream(true);
@@ -125,33 +130,48 @@ public class MyVpnService extends VpnService {
             Log.d(TAG, "Tun2Socks Started");
 
         } catch (Exception e) {
+            saveErrorToFile(e);
             Log.e(TAG, "Gagal menjalankan Tun2Socks: " + e.getMessage());
+        }
+    }
+
+    private void copyFile(File source, File dest) throws IOException {
+        if (!dest.exists()) {
+            try (InputStream in = new FileInputStream(source);
+                 OutputStream out = new FileOutputStream(dest)) {
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            }
+        }
+    }
+
+    private void saveErrorToFile(Exception e) {
+        try {
+            File logFile = new File(getFilesDir(), "vpn_error.log");
+            FileOutputStream fos = new FileOutputStream(logFile, false);
+            PrintWriter pw = new PrintWriter(fos);
+            e.printStackTrace(pw);
+            pw.flush();
+            pw.close();
+        } catch (Exception ex) {
+            Log.e(TAG, "Gagal menyimpan log error");
         }
     }
 
     private void stopVpn() {
         isRunning = false;
-        
-        if (tun2socksProcess != null) {
-            tun2socksProcess.destroy();
-            tun2socksProcess = null;
-        }
-
+        if (tun2socksProcess != null) { tun2socksProcess.destroy(); tun2socksProcess = null; }
         if (coreController != null) {
-            // PERBAIKAN: Bungkus stopLoop dengan try-catch karena bisa memunculkan Exception
-            try {
-                coreController.stopLoop();
-            } catch (Exception e) {
-                Log.e(TAG, "Gagal menghentikan Xray loop: " + e.getMessage());
-            }
+            try { coreController.stopLoop(); } catch (Exception e) {}
             coreController = null;
         }
-
         if (mInterface != null) {
             try { mInterface.close(); } catch (Exception e) {}
             mInterface = null;
         }
-        
         stopForeground(true);
         stopSelf();
     }
@@ -163,7 +183,6 @@ public class MyVpnService extends VpnService {
             NotificationManager manager = getSystemService(NotificationManager.class);
             if (manager != null) manager.createNotificationChannel(channel);
         }
-
         Intent stopIntent = new Intent(this, MyVpnService.class);
         stopIntent.setAction("STOP");
         PendingIntent pendingStop = PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -174,19 +193,11 @@ public class MyVpnService extends VpnService {
                 .setSmallIcon(android.R.drawable.ic_lock_lock)
                 .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Disconnect", pendingStop)
                 .build();
-
         startForeground(1, notification);
     }
 
     @Override
-    public void onRevoke() {
-        stopVpn();
-        super.onRevoke();
-    }
-
+    public void onRevoke() { stopVpn(); super.onRevoke(); }
     @Override
-    public void onDestroy() {
-        stopVpn();
-        super.onDestroy();
-    }
+    public void onDestroy() { stopVpn(); super.onDestroy(); }
 }
