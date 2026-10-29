@@ -33,6 +33,9 @@ public class MyVpnService extends VpnService {
     private Process tun2socksProcess;
     private CoreController coreController;
 
+    // Variabel untuk mengecek apakah VPN benar-benar menyala
+    public static boolean isVpnActuallyRunning = false; 
+
     public static long realDownloadBytes = 0;
     public static long realUploadBytes = 0;
     public static boolean isServerReachable = true;
@@ -79,13 +82,6 @@ public class MyVpnService extends VpnService {
             writeBreadcrumb("02. Membuat Config Xray JSON...");
             String xrayConfig = XrayConfigGenerator.generate(protocol, server, port, id, path, hostHeader, sni, security);
             
-            // SIMPAN JSON KE FILE (Xray biasanya butuh path file, bukan teks mentah)
-            File configFile = new File(getFilesDir(), "config.json");
-            FileOutputStream fos = new FileOutputStream(configFile);
-            fos.write(xrayConfig.getBytes());
-            fos.close();
-            writeBreadcrumb("02b. Config disimpan ke: " + configFile.getAbsolutePath());
-            
             writeBreadcrumb("03. Membuat TUN Interface...");
             Builder builder = new Builder();
             builder.setSession("Andre Cell VPN");
@@ -94,7 +90,6 @@ public class MyVpnService extends VpnService {
             builder.addDnsServer("8.8.8.8");
             builder.setMtu(VPN_MTU);
             
-            // Mencegah routing loop dengan aplikasi kita sendiri
             try {
                 builder.addDisallowedApplication(getPackageName());
             } catch (Exception e) {
@@ -118,8 +113,9 @@ public class MyVpnService extends VpnService {
             coreController = Libv2ray.newCoreController(null);
             
             writeBreadcrumb("07. Memulai Loop Xray (startLoop)...");
-            // PERBAIKAN: Gunakan path file config, bukan teks JSON
-            coreController.startLoop(configFile.getAbsolutePath(), mInterface.getFd());
+            
+            // PERBAIKAN: Gunakan xrayConfig (Teks JSON), BUKAN lokasi file
+            coreController.startLoop(xrayConfig, mInterface.getFd());
             
             writeBreadcrumb("08. Xray Berhasil Menyala!");
 
@@ -127,8 +123,12 @@ public class MyVpnService extends VpnService {
             startTun2Socks();
 
             writeBreadcrumb("10. SUKSES! VPN Terhubung.");
+            
+            // Set status ke true jika semua langkah di atas berhasil tanpa error
+            isVpnActuallyRunning = true;
 
         } catch (Exception e) {
+            isVpnActuallyRunning = false;
             saveErrorToFile(e);
             Log.e(TAG, "Error Start VPN: " + e.getMessage());
             stopVpn();
@@ -202,6 +202,7 @@ public class MyVpnService extends VpnService {
 
     private void stopVpn() {
         isRunning = false;
+        isVpnActuallyRunning = false; // Set status ke false
         if (tun2socksProcess != null) { tun2socksProcess.destroy(); tun2socksProcess = null; }
         if (coreController != null) {
             try { coreController.stopLoop(); } catch (Exception e) {}
