@@ -3,6 +3,7 @@ package com.andrecell.vpn;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.UUID;
 
 public class XrayConfigGenerator {
     
@@ -37,7 +38,6 @@ public class XrayConfigGenerator {
             JSONObject outSettings = new JSONObject();
 
             if (protocol.equalsIgnoreCase("trojan")) {
-                // Format Khusus Trojan: servers -> [ { address, port, password } ]
                 JSONArray servers = new JSONArray();
                 JSONObject serverObj = new JSONObject();
                 serverObj.put("address", server);
@@ -46,13 +46,11 @@ public class XrayConfigGenerator {
                 } catch (Exception e) {
                     serverObj.put("port", 443);
                 }
-                serverObj.put("password", id); // Di Trojan, ID adalah password
+                serverObj.put("password", id); 
                 servers.put(serverObj);
-                
                 outSettings.put("servers", servers);
 
             } else {
-                // Format VMess / VLESS: vnext -> [ { address, port, users: [...] } ]
                 JSONObject vnext = new JSONObject();
                 vnext.put("address", server);
                 try {
@@ -63,27 +61,34 @@ public class XrayConfigGenerator {
 
                 JSONArray users = new JSONArray();
                 JSONObject user = new JSONObject();
-                user.put("id", id);
                 
-                if (protocol.equalsIgnoreCase("vmess")) {
-                    user.put("alterId", 0);
-                    user.put("security", "auto");
-                } else if (protocol.equalsIgnoreCase("vless")) {
+                // PENGAMAN UUID: Jika VLESS tapi ID bukan format UUID, kita ubah jadi UUID acak agar tidak crash
+                if (protocol.equalsIgnoreCase("vless")) {
+                    try {
+                        UUID.fromString(id);
+                        user.put("id", id);
+                    } catch (IllegalArgumentException e) {
+                        user.put("id", UUID.randomUUID().toString()); // Fallback
+                    }
                     user.put("encryption", "none");
                     user.put("flow", "");
+                } else if (protocol.equalsIgnoreCase("vmess")) {
+                    user.put("id", id);
+                    user.put("alterId", 0);
+                    user.put("security", "auto");
                 }
+                
                 users.put(user);
                 vnext.put("users", users);
 
                 JSONArray vnextArray = new JSONArray();
                 vnextArray.put(vnext);
-                
                 outSettings.put("vnext", vnextArray);
             }
 
             outbound.put("settings", outSettings);
 
-            // 4. Stream Settings (TLS, WebSocket, dll)
+            // 4. Stream Settings
             JSONObject streamSettings = new JSONObject();
             streamSettings.put("network", "ws"); 
             streamSettings.put("security", security.toLowerCase()); 
