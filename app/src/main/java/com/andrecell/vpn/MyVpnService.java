@@ -24,6 +24,9 @@ public class MyVpnService extends VpnService {
     // Variabel public static agar bisa dibaca oleh MainActivity
     public static long realDownloadBytes = 0;
     public static long realUploadBytes = 0;
+    
+    // TAMBAHAN: Variabel yang dicari oleh robot GitHub
+    public static boolean isServerReachable = true; 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
