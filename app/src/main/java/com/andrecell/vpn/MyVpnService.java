@@ -37,7 +37,6 @@ public class MyVpnService extends VpnService {
     public static long realUploadBytes = 0;
     public static boolean isServerReachable = true;
 
-    // PERBAIKAN: Ubah IP agar tidak bentrok dengan jaringan lokal
     private static final String VPN_ADDRESS = "10.8.0.2"; 
     private static final int VPN_MTU = 1500;
     private static final int SOCKS_PORT = 10808;
@@ -48,6 +47,8 @@ public class MyVpnService extends VpnService {
             stopVpn();
             return START_NOT_STICKY;
         }
+        // Tulis log pertama sebelum mulai
+        writeBreadcrumb("01. Service dimulai (onStartCommand)");
         startVpn();
         return START_NOT_STICKY; 
     }
@@ -56,9 +57,8 @@ public class MyVpnService extends VpnService {
         if (isRunning) return;
 
         try {
-            // PENGAMAN: Pastikan izin VPN benar-benar sudah diberikan
             if (prepare(this) != null) {
-                throw new Exception("Izin VPN belum diberikan oleh sistem!");
+                throw new Exception("Izin VPN belum diberikan!");
             }
 
             SharedPreferences sharedPref = getSharedPreferences("ConfigVPN", MODE_PRIVATE);
@@ -77,8 +77,10 @@ public class MyVpnService extends VpnService {
                 security = detail.optString("security", "tls");
             }
 
+            writeBreadcrumb("02. Membuat Config Xray JSON...");
             String xrayConfig = XrayConfigGenerator.generate(protocol, server, port, id, path, hostHeader, sni, security);
             
+            writeBreadcrumb("03. Membuat TUN Interface...");
             Builder builder = new Builder();
             builder.setSession("Andre Cell VPN");
             builder.addAddress(VPN_ADDRESS, 32);
@@ -89,20 +91,30 @@ public class MyVpnService extends VpnService {
             mInterface = builder.establish();
             
             if (mInterface == null) {
-                throw new Exception("Gagal membuat TUN. Cek apakah ada VPN lain yang aktif atau izin ditolak.");
+                throw new Exception("Gagal membuat TUN Interface (Mungkin VPN lain aktif).");
             }
             
             isRunning = true;
+            writeBreadcrumb("04. TUN Berhasil dibuat. Menampilkan Notifikasi...");
             showNotification();
 
-            // Jalankan Mesin Xray
+            // MULAI XRAY (Bagian paling rawan crash)
+            writeBreadcrumb("05. Inisialisasi Environment Xray...");
             Libv2ray.initCoreEnv(getFilesDir().getAbsolutePath(), "");
+            
+            writeBreadcrumb("06. Membuat CoreController Xray...");
             coreController = Libv2ray.newCoreController(null);
+            
+            writeBreadcrumb("07. Memulai Loop Xray (startLoop)...");
             coreController.startLoop(xrayConfig, mInterface.getFd());
-            Log.d(TAG, "Xray Engine Started");
+            
+            writeBreadcrumb("08. Xray Berhasil Menyala!");
 
-            // Jalankan Tun2Socks
+            // JALANKAN TUN2SOCKS
+            writeBreadcrumb("09. Menjalankan Tun2Socks...");
             startTun2Socks();
+
+            writeBreadcrumb("10. SUKSES! VPN Terhubung.");
 
         } catch (Exception e) {
             saveErrorToFile(e);
@@ -130,11 +142,11 @@ public class MyVpnService extends VpnService {
             ProcessBuilder pb = new ProcessBuilder(cmd);
             pb.redirectErrorStream(true);
             tun2socksProcess = pb.start();
-            Log.d(TAG, "Tun2Socks Started");
+            writeBreadcrumb("09b. Tun2Socks Process berjalan.");
 
         } catch (Exception e) {
             saveErrorToFile(e);
-            Log.e(TAG, "Gagal menjalankan Tun2Socks: " + e.getMessage());
+            writeBreadcrumb("09c. Gagal menjalankan Tun2Socks: " + e.getMessage());
         }
     }
 
@@ -151,10 +163,23 @@ public class MyVpnService extends VpnService {
         }
     }
 
+    // Fungsi untuk mencatat jejak ke file log
+    private void writeBreadcrumb(String message) {
+        try {
+            File logFile = new File(getFilesDir(), "vpn_debug.log");
+            FileOutputStream fos = new FileOutputStream(logFile, true); // true = Append (tambah)
+            fos.write((message + "\n").getBytes());
+            fos.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Gagal tulis breadcrumb");
+        }
+    }
+
     private void saveErrorToFile(Exception e) {
         try {
-            File logFile = new File(getFilesDir(), "vpn_error.log");
-            FileOutputStream fos = new FileOutputStream(logFile, false);
+            File logFile = new File(getFilesDir(), "vpn_debug.log");
+            FileOutputStream fos = new FileOutputStream(logFile, true);
+            fos.write(("CRASH TERJADI:\n").getBytes());
             PrintWriter pw = new PrintWriter(fos);
             e.printStackTrace(pw);
             pw.flush();
