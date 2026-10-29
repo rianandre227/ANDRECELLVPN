@@ -89,8 +89,8 @@ public class MyVpnService extends VpnService {
             // Buat instance CoreController
             coreController = Libv2ray.newCoreController(null);
             
-            // PERBAIKAN: startLoop hanya menerima parameter String (Config JSON)
-            coreController.startLoop(xrayConfig);
+            // PERBAIKAN: startLoop membutuhkan (String config, int tunFd)
+            coreController.startLoop(xrayConfig, mInterface.getFd());
             Log.d(TAG, "Xray Engine Started");
 
             // 5. Jalankan Tun2Socks (Jembatan)
@@ -184,4 +184,4 @@ public class MyVpnService extends VpnService {
         stopVpn();
         super.onDestroy();
     }
-}
+                }
