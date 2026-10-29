@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +48,8 @@ public class MyVpnService extends VpnService {
             return START_NOT_STICKY;
         }
         startVpn();
-        return START_STICKY;
+        // PERBAIKAN: Gunakan START_NOT_STICKY agar tidak terjadi crash loop
+        return START_NOT_STICKY; 
     }
 
     private void startVpn() {
@@ -97,7 +97,6 @@ public class MyVpnService extends VpnService {
             startTun2Socks();
 
         } catch (Exception e) {
-            // TANGKAP ERROR DAN SIMPAN KE FILE
             saveErrorToFile(e);
             Log.e(TAG, "Error Start VPN: " + e.getMessage());
             stopVpn();
@@ -106,18 +105,14 @@ public class MyVpnService extends VpnService {
 
     private void startTun2Socks() {
         try {
-            // 1. Ambil file .so dari folder native
             String nativeLibDir = getApplicationInfo().nativeLibraryDir;
             File sourceFile = new File(nativeLibDir, "libhev-socks5-tunnel.so");
             
-            // 2. Copy ke folder aman aplikasi (getFilesDir)
             File destFile = new File(getFilesDir(), "tun2socks");
             copyFile(sourceFile, destFile);
             
-            // 3. Beri izin eksekusi
             destFile.setExecutable(true);
 
-            // 4. Jalankan
             List<String> cmd = new ArrayList<>();
             cmd.add(destFile.getAbsolutePath());
             cmd.add("-F"); cmd.add(String.valueOf(mInterface.getFd()));
@@ -185,7 +180,7 @@ public class MyVpnService extends VpnService {
         }
         Intent stopIntent = new Intent(this, MyVpnService.class);
         stopIntent.setAction("STOP");
-        PendingIntent pendingStop = PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingStop = PendingIntent.getService(this, 0, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Notification notification = new Notification.Builder(this, channelId)
                 .setContentTitle("Andre Cell VPN")
