@@ -14,12 +14,10 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-// IMPORT LIBRARY XRAY
+// IMPORT DARI LIBV2RAY
 import libv2ray.CoreController;
 import libv2ray.Libv2ray;
 
@@ -28,7 +26,7 @@ public class MyVpnService extends VpnService {
     private ParcelFileDescriptor mInterface;
     private boolean isRunning = false;
     private Process tun2socksProcess;
-    private CoreController coreController;
+    private CoreController coreController; // Objek Xray
 
     public static long realDownloadBytes = 0;
     public static long realUploadBytes = 0;
@@ -76,7 +74,7 @@ public class MyVpnService extends VpnService {
             Builder builder = new Builder();
             builder.setSession("Andre Cell VPN");
             builder.addAddress(VPN_ADDRESS, 32);
-            builder.addRoute("0.0.0.0", 0); // Route semua traffic
+            builder.addRoute("0.0.0.0", 0);
             builder.addDnsServer("8.8.8.8");
             builder.setMtu(VPN_MTU);
             
@@ -85,9 +83,15 @@ public class MyVpnService extends VpnService {
             showNotification();
 
             // 4. Jalankan Mesin Xray (libv2ray.aar)
-            Libv2ray.initCoreEnv(getFilesDir().getAbsolutePath());
+            // Perbaikan 1: initCoreEnv membutuhkan 2 parameter String (path dan key)
+            Libv2ray.initCoreEnv(getFilesDir().getAbsolutePath(), "");
+            
+            // Buat instance CoreController
             coreController = Libv2ray.newCoreController(null);
-            coreController.startLoop(xrayConfig, getFilesDir().getAbsolutePath());
+            
+            // Perbaikan 2: startLoop membutuhkan (int tunFd, String config)
+            // Kita kirimkan File Descriptor dari TUN Interface dan Config JSON-nya
+            coreController.startLoop(mInterface.getFd(), xrayConfig);
             Log.d(TAG, "Xray Engine Started");
 
             // 5. Jalankan Tun2Socks (Jembatan)
@@ -101,21 +105,20 @@ public class MyVpnService extends VpnService {
 
     private void startTun2Socks() {
         try {
-            // Ambil lokasi file .so dari folder native aplikasi
             String nativeLibDir = getApplicationInfo().nativeLibraryDir;
             File tun2socksFile = new File(nativeLibDir, "libhev-socks5-tunnel.so");
 
             if (!tun2socksFile.exists()) {
-                Log.e(TAG, "File libhev-socks5-tunnel.so tidak ditemukan di: " + tun2socksFile.getAbsolutePath());
+                Log.e(TAG, "File libhev-socks5-tunnel.so tidak ditemukan!");
                 return;
             }
 
-            // Perintah untuk menjalankan Tun2Socks
+            // Perintah menjalankan Tun2Socks
             List<String> cmd = new ArrayList<>();
             cmd.add(tun2socksFile.getAbsolutePath());
-            cmd.add("-F"); cmd.add(String.valueOf(mInterface.getFd()));
-            cmd.add("-M"); cmd.add(String.valueOf(VPN_MTU));
-            cmd.add("-s"); cmd.add("127.0.0.1:" + SOCKS_PORT);
+            cmd.add("-F"); cmd.add(String.valueOf(mInterface.getFd())); // File Descriptor TUN
+            cmd.add("-M"); cmd.add(String.valueOf(VPN_MTU)); // MTU
+            cmd.add("-s"); cmd.add("127.0.0.1:" + SOCKS_PORT); // Arahkan ke port SOCKS Xray
 
             ProcessBuilder pb = new ProcessBuilder(cmd);
             pb.redirectErrorStream(true);
@@ -137,7 +140,7 @@ public class MyVpnService extends VpnService {
 
         if (coreController != null) {
             coreController.stopLoop();
-            Libv2ray.resetCoreEnv();
+            // Perbaikan 3: Hapus baris resetCoreEnv() karena method tersebut tidak ada
             coreController = null;
         }
 
