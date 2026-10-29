@@ -89,7 +89,7 @@ public class MyVpnService extends VpnService {
             // Buat instance CoreController
             coreController = Libv2ray.newCoreController(null);
             
-            // PERBAIKAN: startLoop membutuhkan (String config, int tunFd)
+            // startLoop membutuhkan (String config, int tunFd)
             coreController.startLoop(xrayConfig, mInterface.getFd());
             Log.d(TAG, "Xray Engine Started");
 
@@ -138,7 +138,12 @@ public class MyVpnService extends VpnService {
         }
 
         if (coreController != null) {
-            coreController.stopLoop();
+            // PERBAIKAN: Bungkus stopLoop dengan try-catch karena bisa memunculkan Exception
+            try {
+                coreController.stopLoop();
+            } catch (Exception e) {
+                Log.e(TAG, "Gagal menghentikan Xray loop: " + e.getMessage());
+            }
             coreController = null;
         }
 
@@ -184,4 +189,4 @@ public class MyVpnService extends VpnService {
         stopVpn();
         super.onDestroy();
     }
-                }
+}
