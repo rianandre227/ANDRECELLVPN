@@ -83,15 +83,14 @@ public class MyVpnService extends VpnService {
             showNotification();
 
             // 4. Jalankan Mesin Xray (libv2ray.aar)
-            // Perbaikan 1: initCoreEnv membutuhkan 2 parameter String (path dan key)
+            // Inisialisasi Environment
             Libv2ray.initCoreEnv(getFilesDir().getAbsolutePath(), "");
             
             // Buat instance CoreController
             coreController = Libv2ray.newCoreController(null);
             
-            // Perbaikan 2: startLoop membutuhkan (int tunFd, String config)
-            // Kita kirimkan File Descriptor dari TUN Interface dan Config JSON-nya
-            coreController.startLoop(mInterface.getFd(), xrayConfig);
+            // PERBAIKAN: startLoop hanya menerima (String config, String path)
+            coreController.startLoop(xrayConfig, getFilesDir().getAbsolutePath());
             Log.d(TAG, "Xray Engine Started");
 
             // 5. Jalankan Tun2Socks (Jembatan)
@@ -116,7 +115,7 @@ public class MyVpnService extends VpnService {
             // Perintah menjalankan Tun2Socks
             List<String> cmd = new ArrayList<>();
             cmd.add(tun2socksFile.getAbsolutePath());
-            cmd.add("-F"); cmd.add(String.valueOf(mInterface.getFd())); // File Descriptor TUN
+            cmd.add("-F"); cmd.add(String.valueOf(mInterface.getFd())); // File Descriptor TUN (Untuk Tun2Socks)
             cmd.add("-M"); cmd.add(String.valueOf(VPN_MTU)); // MTU
             cmd.add("-s"); cmd.add("127.0.0.1:" + SOCKS_PORT); // Arahkan ke port SOCKS Xray
 
@@ -140,7 +139,6 @@ public class MyVpnService extends VpnService {
 
         if (coreController != null) {
             coreController.stopLoop();
-            // Perbaikan 3: Hapus baris resetCoreEnv() karena method tersebut tidak ada
             coreController = null;
         }
 
