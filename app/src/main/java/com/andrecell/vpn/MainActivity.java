@@ -138,19 +138,20 @@ public class MainActivity extends Activity {
         Intent vpnIntent = new Intent(this, MyVpnService.class);
         startService(vpnIntent);
 
-        // Tunggu Service mengecek server (delay 2 detik untuk simulasi)
+        // Cek status setelah 2 detik. Jika MyVpnService crash, UI akan berubah jadi GAGAL
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (isConnected) {
-                    if (MyVpnService.isServerReachable) {
+                    if (MyVpnService.isVpnActuallyRunning) {
                         tvStatus.setText("CONNECTED");
                         tvStatus.setTextColor(0xFF00FFCC);
-                        Toast.makeText(MainActivity.this, "Server Aktif! Terhubung.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "VPN Asli Terhubung!", Toast.LENGTH_SHORT).show();
                     } else {
-                        tvStatus.setText("CONNECTED (NO INTERNET)");
+                        tvStatus.setText("FAILED TO CONNECT");
                         tvStatus.setTextColor(0xFFFF4C4C); // Merah
-                        Toast.makeText(MainActivity.this, "Server Mati atau diblokir!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "VPN Gagal Menyala. Cek Logs!", Toast.LENGTH_LONG).show();
+                        stopVpnConnection(); // Reset UI
                     }
                 }
             }
@@ -177,7 +178,6 @@ public class MainActivity extends Activity {
         timeSwapBuff += timeInMilliseconds;
         timerHandler.removeCallbacks(updateTimerThread);
         
-        // Reset angka
         tvDownloadTotal.setText("0 B");
         tvUploadTotal.setText("0 B");
     }
@@ -192,7 +192,6 @@ public class MainActivity extends Activity {
             secs = secs % 60;
             tvTimer.setText(String.format("%02d:%02d:%02d", hours, mins, secs));
 
-            // AMBIL ANGKA REAL DARI SERVICE (BUKAN SIMULASI LAGI)
             if (isConnected) {
                 tvDownloadTotal.setText(formatSize(MyVpnService.realDownloadBytes));
                 tvUploadTotal.setText(formatSize(MyVpnService.realUploadBytes));
