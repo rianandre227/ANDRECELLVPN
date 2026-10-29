@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.andrecell.vpn">
 
-    <!-- Izin Wakelock & VPN -->
+    <!-- Izin Dasar & VPN -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    
+    <!-- Izin Foreground Service (Wajib Android 14) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <application
-    android:label="@string/app_name"
-    android:supportsRtl="true"
-    android:theme="@style/AppTheme"
-    android:extractNativeLibs="true"> <!-- TAMBAHKAN BARIS INI -->
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:extractNativeLibs="true">
         
+        <!-- Halaman Utama -->
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +26,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Halaman Lainnya -->
         <activity android:name=".AddConfigActivity" />
         <activity android:name=".ConfigListActivity" />
         <activity android:name=".V2rayActivity" />
@@ -28,14 +35,22 @@
         <activity android:name=".LogsActivity" />
         <activity android:name=".MoreActivity" />
 
-        <!-- DAFTARKAN VPN SERVICE -->
+        <!-- DAFTARKAN VPN SERVICE DENGAN TIPE specialUse -->
         <service
             android:name=".MyVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE"
-            android:exported="false">
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            tools:ignore="VpnServicePolicy">
+            
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
+            
+            <!-- Properti tambahan untuk menjelaskan penggunaan specialUse -->
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="vpn" />
         </service>
 
     </application>
